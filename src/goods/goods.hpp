@@ -1,54 +1,56 @@
 #ifndef GOODS_HPP
 #define GOODS_HPP
 
-#include "../globals.hpp"
 #include <string>
+#include <unordered_set>
+#include <vector>
+#include <memory>
+
+#include "../globals.hpp"
 
 // Enum for good types - combine with class for best of both worlds
-enum class GoodType{
-    STRUCTURAL,
+enum class Sector{
+    AGRICULTURE,
+    BASIC_MATERIALS,
     CONSUMER_STAPLE,
     CONSUMER_DISCRETIONARY,
+    INDUSTRIALS,
     UTILITIES,
-    LUXURY,
     MILITARY,
-    MEDICINE,
+    HEALTHCARE,
     MISC
 };
 
-enum class ManufacturingStep{
+enum class GoodTier{
     RAW_MATERIAL,
-    INTERMEDIARY,
+    REFINED_MATERIAL,
+    INTERMEDIATE,
     MANUFACTURED
 };
 
 class Goods{
     public:
-        Goods(const std::string& name, int price, int weight, GoodType type);
+        Goods(const std::string& name, int price, int weight, Sector sector);
         
-        // Getters
-        const std::string& getName() const {
-            return goodName;
-        }
-        int getID() const {
-            return goodID;
-        }
-        int getBasePrice() const {
-            return basePrice;
-        }
-        int getWeight() const {
-            return transportWeight;
-        }
-        GoodType getType() const {
-            return goodType;
-        }
+        //Getters
+        const std::string& getName() const;
+        int getID() const;
+        int getBasePrice() const;
+        int getWeight() const;
+        Sector getGoodSector() const;
+        
+        //Load from file
+        static std::vector<std::unique_ptr<Goods>> loadFromFile(const std::string& filename);
+        static std::vector<std::unique_ptr<Goods>> loadFromProjectFile(const std::string& relativePath);
+        static std::string getExecutableDirectory();
+        static Sector stringToSector(const std::string& sectorStr);
 
     private:
         std::string goodName;
         const int goodID;
         int basePrice;
         int transportWeight;
-        GoodType goodType;
+        Sector goodSector;
         
         static int nextID;
 };

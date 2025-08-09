@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "memory": "cpp",
+        "unordered_map": "cpp",
+        "utility": "cpp"
+    }
+}
