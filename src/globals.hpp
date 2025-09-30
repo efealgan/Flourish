@@ -2,7 +2,7 @@
 #define GLOBALS_HPP
 #include <string>
 
-const char* mainWinTitle = "Flourish";
+extern const char* mainWinTitle;
 
 
 #endif //GLOBALS_HPP

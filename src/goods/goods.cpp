@@ -5,7 +5,6 @@
 #include <memory>
 #include <unordered_map>
 #include <stdexcept>
-#include <filesystem>
 
 #include "goods.hpp"
 
@@ -42,15 +41,15 @@ Sector Goods::getGoodSector() const {
 //Load From File
 Sector Goods::stringToSector(const std::string& sectorStr) {
     static const std::unordered_map<std::string, Sector> sectorMap = {
-        {"AGRICULTURE", Sector::AGRICULTURE},
-        {"BASIC_MATERIALS", Sector::BASIC_MATERIALS},
-        {"CONSUMER_STAPLE", Sector::CONSUMER_STAPLE},
-        {"CONSUMER_DISCRETIONARY", Sector::CONSUMER_DISCRETIONARY},
-        {"INDUSTRIALS", Sector::INDUSTRIALS},
-        {"UTILITIES", Sector::UTILITIES},
-        {"MILITARY", Sector::MILITARY},
-        {"HEALTHCARE", Sector::HEALTHCARE},
-        {"MISC", Sector::MISC}
+        {"AGRICULTURE",             Sector::AGRICULTURE},
+        {"BASIC_MATERIALS",         Sector::BASIC_MATERIALS},
+        {"CONSUMER_STAPLE",         Sector::CONSUMER_STAPLE},
+        {"CONSUMER_DISCRETIONARY",  Sector::CONSUMER_DISCRETIONARY},
+        {"INDUSTRIALS",             Sector::INDUSTRIALS},
+        {"UTILITIES",               Sector::UTILITIES},
+        {"MILITARY",                Sector::MILITARY},
+        {"HEALTHCARE",              Sector::HEALTHCARE},
+        {"MISC",                    Sector::MISC}
     };
     
     auto it = sectorMap.find(sectorStr);
@@ -116,41 +115,5 @@ std::vector<std::unique_ptr<Goods>> Goods::loadFromFile(const std::string& filen
     
     std::cout << "Loaded " << goodsList.size() << " goods from " << filename << "\n";
     return goodsList;
-}
-
-// Get the directory where the executable is located
-std::string Goods::getExecutableDirectory() {
-    try {
-        std::filesystem::path execPath = std::filesystem::current_path();
-        return execPath.string();
-    } catch (const std::exception& e) {
-        std::cerr << "Error getting executable directory: " << e.what() << "\n";
-        return "."; // Fallback to current directory
-    }
-}
-
-// Load from file relative to project root (more reliable)
-std::vector<std::unique_ptr<Goods>> Goods::loadFromProjectFile(const std::string& relativePath) {
-    // Try multiple possible project root locations
-    std::vector<std::string> possiblePaths = {
-        relativePath,                           // Current directory
-        "../" + relativePath,                   // One level up (if running from build/)
-        "../../" + relativePath,                // Two levels up (if running from build/bin/)
-        std::filesystem::current_path().string() + "/" + relativePath
-    };
-    
-    for (const auto& path : possiblePaths) {
-        if (std::filesystem::exists(path)) {
-            std::cout << "Found goods file at: " << path << "\n";
-            return loadFromFile(path);
-        }
-    }
-    
-    // If no file found, show what we tried
-    std::string errorMsg = "Could not find goods file. Tried paths:\n";
-    for (const auto& path : possiblePaths) {
-        errorMsg += "  - " + path + "\n";
-    }
-    throw std::runtime_error(errorMsg);
 }
 

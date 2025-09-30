@@ -32,6 +32,10 @@ class Goods{
     public:
         Goods(const std::string& name, int price, int weight, Sector sector);
         
+        //Load from file
+        static std::vector<std::unique_ptr<Goods>> loadFromFile(const std::string& filename);
+        static Sector stringToSector(const std::string& sectorStr);
+
         //Getters
         const std::string& getName() const;
         int getID() const;
@@ -39,12 +43,6 @@ class Goods{
         int getWeight() const;
         Sector getGoodSector() const;
         
-        //Load from file
-        static std::vector<std::unique_ptr<Goods>> loadFromFile(const std::string& filename);
-        static std::vector<std::unique_ptr<Goods>> loadFromProjectFile(const std::string& relativePath);
-        static std::string getExecutableDirectory();
-        static Sector stringToSector(const std::string& sectorStr);
-
     private:
         std::string goodName;
         const int goodID;
